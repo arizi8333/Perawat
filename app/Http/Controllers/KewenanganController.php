@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\KewenanganKlinik;
 use App\Models\PerawatKlinik;
+use App\Models\DetailKewenangan;
 use Carbon\Carbon;
 use Alert;
 
@@ -72,5 +73,24 @@ class KewenanganController extends Controller
 
     public function delete($id){
         KewenanganKlinik::where('id_kewenangan', $id)->delete();
+    }
+
+    // Unit Kompetensi
+
+    public function unitkompetensi($id){
+        $decrypted_string = str_replace('_', '/', $id);
+        $data = DetailKewenangan::where('credential_id', $decrypted_string)->with('request_credentials','kewenangan_klinis')->get();
+        return view('admin.UnitKompetensi.index', compact('data'));
+    }
+
+    public function update_unitkompetensi(Request $request){
+        foreach($request->kewenangan_id as $key => $r){
+            DetailKewenangan::where('credential_id', $request->kredensial_id)->where('kewenangan_id', $r)->update([
+                'keterangan' => $request->nilai[$key],
+            ]);
+        }
+        $decrypted_string = str_replace('_', '/', $request->kredensial_id);
+
+        return redirect()->route('DetailRiwayatKredensialPerawat', $decrypted_string);
     }
 }

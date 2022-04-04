@@ -107,7 +107,7 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'Kredensial-riwayat'], function () {
             Route::get('/', [App\Http\Controllers\LaporanKredensialController::class, 'RiwayatKredensialPerawat'])->name('riwayat-kredensial.index');
             Route::get('/data', [App\Http\Controllers\UserController::class, 'data_perawat']);
-            Route::get('/detail/{id}', [App\Http\Controllers\LaporanKredensialController::class, 'DetailRiwayatKredensialPerawat']);
+            Route::get('/detail/{id}', [App\Http\Controllers\LaporanKredensialController::class, 'DetailRiwayatKredensialPerawat'])->name('DetailRiwayatKredensialPerawat');
             Route::get('/detail/data/{id}', [App\Http\Controllers\LaporanKredensialController::class, 'data_DetailRiwayatKredensialPerawat']);
             Route::get('/detail/kewenangan/{id}', [App\Http\Controllers\LaporanKredensialController::class, 'DetailKewenanganKredensialPerawat']);
         });
@@ -120,6 +120,8 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'spk-rkk'], function () {
             Route::get('/', [App\Http\Controllers\LaporanKredensialController::class, 'spk_rkk'])->name('spk-rkk.index');
             Route::get('/data', [App\Http\Controllers\LaporanKredensialController::class, 'data_spk_rkk']);
+            Route::get('/kompetensi/{id}', [App\Http\Controllers\KewenanganController::class, 'unitkompetensi']);
+            Route::post('/kompetensi/update', [App\Http\Controllers\KewenanganController::class, 'update_unitkompetensi']);
         });
     });
     

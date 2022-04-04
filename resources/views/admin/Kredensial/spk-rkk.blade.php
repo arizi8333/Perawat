@@ -35,6 +35,7 @@
                                         <th>Tanggal Selesai</th>
                                         <th>SPK</th>
                                         <th>RKK</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody style="font-size:13px;">
@@ -105,6 +106,14 @@
                             return '<a style="text-decoration:none" href="#" data-id="'+data_replace+'" id="rkk" class="text-primary berkas-action" title="Rincian Kewenangan Klinik"><i class="fa fa-envelope"></i></a>';
                         },
                     },
+                    {
+                        data: 'id_kredensial',
+                        sClass: 'text-center',
+                        render: function(data) {
+                            data_replace = data.replace(/\//g, '_');
+                            return '<a style="text-decoration:none" href="#" data-id="'+data_replace+'" id="detail" class="text-primary berkas-action" title="Rincian Kewenangan Klinik"><i class="fa fa-info-circle"></i></a>';
+                        },
+                    },
                 ],
             });
 
@@ -121,6 +130,11 @@
     $(document).on('click', '#rkk', function() {
         var id = $(this).data('id');
         window.open("{{ url('cetak/rkk') }}/"+id);
+    });
+
+    $(document).on('click', '#detail', function() {
+        var id = $(this).data('id');
+        window.location.href = "{{ url('admin/spk-rkk/kompetensi') }}/"+id;
     });
 
     });

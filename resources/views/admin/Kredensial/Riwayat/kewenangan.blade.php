@@ -79,7 +79,7 @@
                                         <tr>
                                             <td class="text-center">{{$no++}}.</td>
                                             <td>{{$d->kewenangan_klinis->rincian_kewenangan}}</td>
-                                            <td class="text-center">{{$d->kewenangan_klinis->keterangan}}</td>
+                                            <td class="text-center">{{$d->keterangan}}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

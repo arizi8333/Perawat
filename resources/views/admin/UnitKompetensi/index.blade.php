@@ -5,7 +5,7 @@
 @endsection
 
 @section('navbar')
-    @include('direktur._navbar')
+    @include('admin._navbar')
 @endsection
 
 @section('main')
@@ -20,7 +20,19 @@
             <div class="col-md-12">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Informasi Kredensial</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="m-0 font-weight-bold text-primary">Informasi Kredential</h6>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a href="#" id="add" class="btn btn-primary btn-icon-split btn-sm">
+                                    <span class="icon text-white-50">
+                                        <i class="fa fa-plus"></i>
+                                    </span>
+                                    <span class="text">Fill Data</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body border-bottom-primary">
                         <div class="row">
@@ -98,7 +110,43 @@
 @endsection
 
 @section('modal')
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Form Persyaratan</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{Form::open(array('method' => 'POST', 'id' => 'form'))}}
+                    {{ csrf_field() }}
+                    @foreach($data as $d)
 
+                    <div class="form-group" id="div_nama">
+                        {{Form::label('text', 'Kewenangan Klinis :', ['class' => 'awesome'])}}
+                        <!-- {{Form::select('jenis_kredensial_id',['K1' => 'Kredensial Baru','K2' => 'Rekredensial','K3' => 'Kredensial Naik Pangkat'],null,['class' => 'form-control', 'id' => 'jenis_kredensial_id'])}} -->
+                        <input class="form-control" type="text" name="kewenangan" value="{{$d->kewenangan_klinis->rincian_kewenangan}}" readonly>
+                        <input class="form-control" type="hidden" name="kredensial_id" value="{{$d->credential_id}}" readonly>
+                        <input class="form-control" type="hidden" name="kewenangan_id[]" value="{{$d->kewenangan_klinis->id_kewenangan}}" readonly>
+                    </div>
+                    <div class="form-group" id="div_nama">
+                        {{Form::label('text', 'Nilai :', ['class' => 'awesome'])}}
+                        {{Form::text('nilai[]','',['class' => 'form-control', 'id' => 'nilai'])}}
+                    </div>
+
+                    @endforeach
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-primary" value="Save">
+                    {{Form::close()}}
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -114,4 +162,31 @@
 <!-- Page level plugins -->
 <script src="{{asset('template/vendor/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('template/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+<script>
+    $(document).ready( function () {
+
+    $(document).on('click', '#add', function() {
+        $('#modal').modal('show');  
+        $('#form').attr('action', '{{ url('admin/spk-rkk/kompetensi/update') }}');     
+    });
+
+    $('#simpan').submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData($(this)[0]);
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action')+'?_token='+'{{ csrf_token() }}',
+            data: formData,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success :function () {
+                alert(data.success);
+                $('#modal').modal('hide');
+                location.reload();
+            },
+        });
+    });
+
+    });
+</script>
 @endsection
